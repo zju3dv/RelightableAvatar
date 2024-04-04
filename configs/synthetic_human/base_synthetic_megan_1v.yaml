@@ -1,0 +1,37 @@
+# Dataset Configuration
+exp_name: base_synthetic_megan_1v
+parent_cfg: configs/base.yaml
+
+# Data Configuration
+train_dataset:
+    data_root: data/synthetic_human/megan
+    human: megan
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/synthetic_human/megan
+    human: megan
+    ann_file: annots.npy
+    split: test
+
+# Selection Configuration
+ratio: 1.0
+# prettier-ignore
+training_view: [ 4, ]
+# prettier-ignore
+test_view: [0, 4, 8, 12, 15, 19]
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 100
+num_eval_frame: 100
+num_render_view: 300
+test:
+    view_sampler_interval: 1
+    frame_sampler_interval: 21
+
+# Relighting Configuration
+relighting_cfg:
+    exp_name: relight_synthetic_megan_1v
+    geometry_mesh: data/animation/deform/base_synthetic_megan_1v/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/base_synthetic_megan_1v

@@ -1,0 +1,18 @@
+{
+    "search.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/data": true,
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/data": true,
+    },
+    "files.watcherExclude": {
+        "**/data": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    }
+}

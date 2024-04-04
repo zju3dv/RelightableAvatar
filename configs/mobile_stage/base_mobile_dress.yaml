@@ -1,0 +1,37 @@
+exp_name: base_mobile_dress
+parent_cfg: configs/base.yaml
+
+# Data options
+train_dataset:
+    data_root: data/mobile_stage/220609_162358_weiyu_round+001700+002600
+    human: weiyu
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/mobile_stage/220609_162358_weiyu_round+001700+002600
+    human: weiyu
+    ann_file: annots.npy
+    split: test
+
+mask: rvm
+
+# Selection Options
+# prettier-ignore
+training_view: [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30] # 12 views
+# prettier-ignore
+test_view: [] # will use all view except training views
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 600
+num_eval_frame: 900
+num_render_view: 300
+test:
+    view_sampler_interval: 8
+    frame_sampler_interval: 120
+
+# Relighting Configuration
+relighting_cfg:
+    exp_name: relight_mobile_dress
+    geometry_mesh: data/animation/deform/base_mobile_dress/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/base_mobile_dress

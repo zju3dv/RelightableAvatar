@@ -1,0 +1,44 @@
+exp_name: base_mobile_move
+parent_cfg: configs/base.yaml
+
+# Data options
+train_dataset:
+    data_root: data/mobile_stage/220608_163646_model3_move+001400+002600
+    human: model3
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/mobile_stage/220608_163646_model3_move+001400+002600
+    human: model3
+    ann_file: annots.npy
+    split: test
+
+mask: rvm
+
+# Selection Options
+# prettier-ignore
+training_view: [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33] # 12 views
+# prettier-ignore
+test_view: [] # will use all view except training views
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 1000
+num_eval_frame: 1200
+num_render_view: 200
+test:
+    view_sampler_interval: 8
+    frame_sampler_interval: 180
+
+# Relighting Configuration
+relighting_cfg:
+    exp_name: relight_mobile_move
+    geometry_mesh: data/animation/deform/base_mobile_move/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/base_mobile_move
+    train:
+        lr_table:
+            residual_deformation_network: 1.0e-6 # base geometry should not change much
+            signed_distance_network: 1.0e-6
+    eikonal_loss_weight: 0.25 # smoother canonical mesh
+    observed_eikonal_loss_weight: 0.25 # smoother residual deformation -> also smoother canonical mesh
+    roughness_smooth_weight: 5.0e-2

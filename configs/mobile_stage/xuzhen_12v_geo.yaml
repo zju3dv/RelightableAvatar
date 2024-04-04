@@ -1,0 +1,58 @@
+exp_name: xuzhen_12v_geo
+parent_cfg: configs/base.yaml
+
+# Data Configuration
+train_dataset:
+    data_root: data/mobile_stage/xuzhen
+    human: xuzhen
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/mobile_stage/xuzhen
+    human: xuzhen
+    ann_file: annots.npy
+    split: test
+
+mask: rvm
+
+# Selection Configuration
+ratio: 1.0
+# prettier-ignore
+training_view: [0, 2, 4, 6, 7, 8, 11, 14, 15, 19, 21, 24, 27, 30]
+# prettier-ignore
+test_view: [] # use training views
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 1600
+num_eval_frame: 2000
+num_render_view: 400
+test:
+    view_sampler_interval: 8
+    frame_sampler_interval: 300
+
+eikonal_loss_weight: 0.01
+observed_eikonal_loss_weight: 0.005
+
+mesh_simp: True # match smpl?
+mesh_simp_face: 16384
+novel_view_z_off: 1.5
+
+# Loss Configuration
+resd_loss_weight: 0.1
+lambertian: False # important for final result when view is dense enough
+
+# Relighting Configuration
+relighting_cfg:
+    dist_th: 0.125 # closer to surface, 2cm, and this is not helping very much
+    obj_lvis:
+        dist_th: 0.125 # this affects performance greatly, slow, good looking and smooth, fast, janky
+    # relight_network_width: 256
+    # relight_network_depth: 8
+    # use_geometry: True # when using learned geometry, could have much higher tolerance for distance
+    achro_light: True
+    albedo_smooth_weight: 5.0e-4
+    albedo_sparsity: 5.0e-5
+    exp_name: xuzhen_12v_geo_fix_mat
+    geometry_mesh: data/animation/deform/xuzhen_12v_geo/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/xuzhen_12v_geo

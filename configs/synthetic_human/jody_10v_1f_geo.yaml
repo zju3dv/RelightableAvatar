@@ -1,0 +1,44 @@
+exp_name: jody_10v_1f_geo
+parent_cfg: configs/base.yaml
+
+# Data Configuration
+train_dataset:
+    data_root: data/synthetic_human/jody
+    human: jody
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/synthetic_human/jody
+    human: jody
+    ann_file: annots.npy
+    split: test
+
+# Selection Configuration
+ratio: 1.0
+# prettier-ignore
+training_view: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+# prettier-ignore
+test_view: [0, 4, 8, 12, 15, 19]
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 1
+num_eval_frame: 100
+num_render_view: 300
+test:
+    view_sampler_interval: 1
+    frame_sampler_interval: 21
+
+mesh_simp: True # match smpl?
+mesh_simp_face: 16384
+
+# Relighting Configuration
+relighting_cfg:
+    dist_th: 0.1 # closer to surface, 2cm, and this is not helping very much
+    obj_lvis:
+        dist_th: 0.025 # this affects performance greatly, slow, good looking and smooth, fast, janky
+
+    use_geometry: True # when using learned geometry, could have much higher tolerance for distance
+    exp_name: jody_10v_1f_geo_fix_mat
+    geometry_mesh: data/animation/deform/jody_10v_geo/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/jody_10v_geo

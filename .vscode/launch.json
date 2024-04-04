@@ -1,0 +1,54 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Training mi11_1k_feat",
+            "type": "python",
+            "request": "launch",
+            "program": "train_net.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                // "CUDA_VISIBLE_DEVICES": "0"
+            },
+            "args": [
+                "--cfg_file",
+                "configs/rendering/mi11_1k_feat.yaml",
+                "exp_name",
+                "mi11_1k_feat_test",
+                "suppress_timer",
+                "False",
+                "gpus",
+                "5,",
+            ]
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+        },
+        {
+            "name": "Training Tracking",
+            "type": "python",
+            "request": "launch",
+            "program": "train_net.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                // "CUDA_VISIBLE_DEVICES": "0"
+            },
+            "args": [
+                "--cfg_file",
+                "configs/rendering/base_zju_a1s0_smplh_tracking.yaml",
+                "gpus",
+                "1,",
+            ]
+        },
+    ]
+}

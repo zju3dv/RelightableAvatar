@@ -1,0 +1,44 @@
+exp_name: my_313_4v_geo
+parent_cfg: configs/base.yaml
+
+# Data Configuration
+train_dataset:
+    data_root: data/my_zju_mocap/my_313
+    human: my_313
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/my_zju_mocap/my_313
+    human: my_313
+    ann_file: annots.npy
+    split: test
+
+# Selection Configuration
+ratio: 1.0
+# prettier-ignore
+training_view: [ 0, 6, 12, 18 ]
+# prettier-ignore
+test_view: [1,2,3,4,5,7,8,9,10,11,13,14,15,16,17,19,20] # use other views as training view
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 60
+num_eval_frame: 60
+num_render_view: 300
+test:
+    view_sampler_interval: 1
+    frame_sampler_interval: 10
+
+mesh_simp: True # match smpl?
+mesh_simp_face: 16384
+
+# Relighting Configuration
+relighting_cfg:
+    dist_th: 0.1 # closer to surface, 2cm, and this is not helping very much
+    obj_lvis:
+        dist_th: 0.025 # this affects performance greatly, slow, good looking and smooth, fast, janky
+
+    use_geometry: True # when using learned geometry, could have much higher tolerance for distance
+    exp_name: my_313_4v_geo_fix_mat
+    geometry_mesh: data/animation/deform/my_313_4v_geo/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/my_313_4v_geo

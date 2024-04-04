@@ -1,0 +1,42 @@
+exp_name: base_mobile_xuzhen
+parent_cfg: configs/base.yaml
+
+# Data Configuration
+train_dataset:
+    data_root: data/mobile_stage/xuzhen
+    human: xuzhen
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/mobile_stage/xuzhen
+    human: xuzhen
+    ann_file: annots.npy
+    split: test
+
+mask: rvm
+
+# Selection Configuration
+ratio: 0.5
+# prettier-ignore
+training_view: [0, 3, 6, 7, 12, 17, 18, 21, 24, 26, 30, 34]
+# prettier-ignore
+test_view: [] # use training views
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 1600
+num_eval_frame: 2000
+num_render_view: 400
+test:
+    view_sampler_interval: 8
+    frame_sampler_interval: 300
+
+# Loss Configuration
+resd_loss_weight: 0.1
+lambertian: False # important for final result when view is dense enough
+
+# Relighting Configuration
+relighting_cfg:
+    exp_name: relight_mobile_xuzhen
+    geometry_mesh: data/animation/deform/base_mobile_xuzhen/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/base_mobile_xuzhen

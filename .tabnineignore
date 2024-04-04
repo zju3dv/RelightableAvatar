@@ -1,0 +1,21 @@
+__pycache__/
+.idea/
+.ipynb_checkpoints/
+*.py[cod]
+*.so
+*.orig
+*.o
+*.json
+*.pth
+*.npy
+*.ipynb
+*.th
+
+# imgui stuff
+imgui.ini
+
+*.ply
+*.png
+*.jpy
+
+data

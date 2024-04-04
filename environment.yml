@@ -1,0 +1,24 @@
+name: phdeform
+channels:
+    - pytorch
+    - nvidia
+    - conda-forge
+    - defaults
+
+dependencies:
+    - python>=3.10
+      # pytorch3d does not support pytorch 1.13 yet
+      # so we install 1.12.1 for now
+    - pytorch==1.12.1 # conda forge version of pytorch does not seem to have kineto
+    - cudatoolkit==11.6
+    - torchvision
+    - torchaudio
+
+    - git
+    - conda-forge::ncurses # vim: /home/xuzhen/miniconda3/envs/phdeform/bin/../lib/libtinfo.so.6: no version information available (required by vim)
+    - vim
+    - cmake
+
+    - pip
+      # - pip:
+      # - -r requirements.txt

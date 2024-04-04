@@ -1,0 +1,51 @@
+exp_name: black_12v_geo
+parent_cfg: configs/base.yaml
+
+# Data options
+train_dataset:
+    data_root: data/mobile_stage/black
+    human: model2
+    ann_file: annots.npy
+    split: train
+
+test_dataset:
+    data_root: data/mobile_stage/black
+    human: model2
+    ann_file: annots.npy
+    split: test
+
+mask: rvm
+
+# Selection Options
+# prettier-ignore
+training_view: [0, 21, 10, 33, 22, 27, 17, 13, 3, 16, 20, 26, 15] # 13 views
+# prettier-ignore
+test_view: [] # will use all view except training views
+fix_material: 0
+begin_ith_frame: 0
+num_train_frame: 800 # only 400 valid frames
+num_eval_frame: 100
+num_render_view: 100
+test:
+    view_sampler_interval: 8
+    frame_sampler_interval: 60
+
+eikonal_loss_weight: 0.01
+observed_eikonal_loss_weight: 0.005
+
+mesh_simp: True # match smpl?
+mesh_simp_face: 16384
+novel_view_z_off: 1.5
+
+# Relighting Configuration
+relighting_cfg:
+    dist_th: 0.1 # closer to surface, 2cm, and this is not helping very much
+    obj_lvis:
+        dist_th: 0.1 # this affects performance greatly, slow, good looking and smooth, fast, janky
+    # relight_network_width: 256
+    # relight_network_depth: 8
+    # use_geometry: True # when using learned geometry, could have much higher tolerance for distance
+    achro_light: True
+    exp_name: black_12v_geo_fix_mat
+    geometry_mesh: data/animation/deform/black_12v_geo/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/black_12v_geo

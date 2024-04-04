@@ -1,0 +1,202 @@
+# Task Configuration
+task: deform
+exp_name: base_my_313
+
+# Module Configuration
+train_dataset_module: lib.datasets.base_dataset
+test_dataset_module: lib.datasets.base_dataset
+network_module: lib.networks.deform.base_network
+renderer_module: lib.networks.renderer.base_renderer
+trainer_module: lib.train.trainers.base_trainer
+evaluator_module: lib.evaluators.base_evaluator
+visualizer_module: lib.visualizers.base_visualizer
+
+# Data Configuration
+training_view: [0, 3, 6, 9, 12, 15, 18] # try 7 views
+# prettier-ignore
+test_view: [] # to get a consistent visualization
+
+ratio: 1.0
+frame_interval: 1
+begin_ith_frame: 0
+num_train_frame: 300
+num_eval_frame: 600
+num_render_view: 300
+
+train_dataset:
+    data_root: data/my_zju_mocap/my_313
+    human: my_313
+    ann_file: annots.npy
+    split: train
+test_dataset:
+    data_root: data/my_zju_mocap/my_313
+    human: my_313
+    ann_file: annots.npy
+    split: test
+
+# Mask Configuration
+mask: mask
+erode_dilate_mask: False
+
+# SMPL & Pose related configuration
+train_motion: motion.npz # relative to data root
+test_motion: motion.npz # relative to data root
+body_model: easymocap/output-output-smpl-3d/cfg_model.yml # controls all previous parameters
+
+# Network Configuration
+xyz_res: 10
+sdf_res: 8
+view_res: 4
+
+# Loss Configuration
+resd_loss_weight: 0.1
+img_loss_weight: 1.0
+eikonal_loss_weight: 0.01 # smoother canonical mesh
+observed_eikonal_loss_weight: 0.005 # smoother residual deformation -> also smoother canonical mesh
+msk_loss_weight: 0.01
+
+# Training Configuration
+train:
+    batch_size: 4 # ddp 8
+    collator: ''
+    lr: 5e-4
+    weight_decay: 0.0
+    epoch: 400
+    scheduler:
+        type: exponential
+        gamma: 0.1
+        decay_epochs: 400
+    num_workers: 4 # avoid excessive memory usage
+    sampler: RandomSampler
+test:
+    sampler: FrameSampler
+    frame_sampler_interval: 30
+    batch_size: 1
+    collator: ''
+
+n_rays: 1024 # 32 x 32?
+n_samples: 128
+save_ep: 50
+eval_ep: 400
+ep_iter: 500
+log_interval: 1
+save_latest_ep: 1
+record_interval: 1
+
+# Threshold Configuration
+norm_th: 0.1
+dist_th: 0.1
+surf_reg_th: 0.02
+clip_near: 0.02
+perturb: 1.0
+bg_brightness: 0.0
+
+# Chunkify Configuration
+train_chunk_size: 4096
+render_chunk_size: 8192
+network_chunk_size: 262144
+voxel_size: [0.005, 0.005, 0.005]
+
+# Visualization Configuration
+pose_seq_cfg:
+    train_dataset_module: lib.datasets.pose_dataset
+    test_dataset_module: lib.datasets.pose_dataset
+    visualizer_module: lib.visualizers.pose_visualizer
+    test:
+        frame_sampler_interval: 1
+        view_sampler_interval: 1
+    test_view: [0]
+
+novel_view_cfg:
+    train_dataset_module: lib.datasets.demo_dataset
+    test_dataset_module: lib.datasets.demo_dataset
+    visualizer_module: lib.visualizers.demo_visualizer
+    test:
+        frame_sampler_interval: 1
+        view_sampler_interval: 1
+
+mesh_cfg:
+    renderer_module: lib.networks.renderer.mesh_renderer
+    train_dataset_module: lib.datasets.mesh_dataset
+    test_dataset_module: lib.datasets.mesh_dataset
+    evaluator_module: lib.evaluators.mesh_evaluator
+    visualizer_module: lib.visualizers.mesh_visualizer
+    test:
+        sampler: MeshFrameSampler
+        view_sampler_interval: 1
+        frame_sampler_interval: 100
+    dist_th: 0.1
+    mesh_th: 0.5
+    mesh_th_to_sdf: True
+
+sphere_tracing_cfg: # will force a sphere tracing renderer
+    n_samples: 3
+    render_chunk_size: 65536
+    network_chunk_size: 1048576
+    renderer_module: lib.networks.renderer.sphere_tracing_renderer
+
+relighting_cfg:
+    # Experiment Configuration
+    task: relight
+    exp_name: relight_my_313
+    geometry_mesh: data/animation/deform/base_my_313/can_mesh.npz
+    geometry_pretrain: data/trained_model/deform/base_my_313
+
+    # Module Configuration
+    trainer_module: lib.train.trainers.relight_trainer # loss computation
+    network_module: lib.networks.relight.relight_network # chunk of the network
+    renderer_module: lib.networks.renderer.sphere_tracing_renderer # general purpose rendering (no params)
+
+    # Training Configuration
+    train:
+        # torchrun --nproc_per_node=2 train.py -c configs/relight_my_313.yaml distributed True train.batch_size 4
+        batch_size: 2 # typical batch size is 8, use 2x ddp for that
+        epoch: 100
+        lr: 5.0e-3 # turns out this is importance for reconstructing good environment map
+        scheduler:
+            type: exponential
+            # type: warmup_exponential
+            # warmup_epochs: 2
+            # warmup_factor: 0.1
+            # warmup_method: linear
+            gamma: 0.1
+            decay_epochs: 100
+        lr_table:
+            residual_deformation_network: 5.0e-6 # base geometry should not change much
+            signed_distance_network: 5.0e-6
+            roughness_network: 5.0e-5 # roughness should be learned slowly, more learning rate tuning
+            # albedo_netowrk: 5.0e-4 # albedo should be learned slowly, more learning rate tuning
+    n_samples: 3 # 3 surface volume samples
+    render_chunk_size: 65536
+    network_chunk_size: 1048576 # large render_chunk size?
+    eval_ep: 100
+    save_ep: 10
+
+    # Loss Configuration
+    albedo_sparsity: 5.0e-5
+    albedo_smooth_weight: 5.0e-3
+    roughness_smooth_weight: 5.0e-5
+    img_loss_weight: 10.0
+    eikonal_loss_weight: 0.05 # larger values for better regularization
+    observed_eikonal_loss_weight: 0.025
+    msk_loss_weight: 0.1 # avoid worse geometry
+
+    mesh_simp_face: -1
+    mesh_th_to_sdf: False
+    mesh_th: 0.0
+
+    # Visualization Configuration
+    novel_view_cfg:
+        renderer_module: lib.networks.renderer.sphere_tracing_renderer # general purpose rendering (no params)
+    pose_seq_cfg:
+        renderer_module: lib.networks.renderer.sphere_tracing_renderer # general purpose rendering (no params)
+    novel_light_cfg: # will use a relighting rendering to store relighting results
+        renderer_module: lib.networks.renderer.novel_light_sphere_tracing
+        visualizer_module: lib.visualizers.light_visualizer # do not try to remove visualizer
+        # test_dataset_module: lib.datasets.pose_dataset
+        # test:
+        # frame_sampler_interval: 1
+        # perform: True
+        # num_eval_frame: 1
+        # num_render_view: 1
+        # test_view: [0]
