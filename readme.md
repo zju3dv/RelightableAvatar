@@ -1,4 +1,4 @@
-# [CVPR 2024] Relightable and Animatable Neural Avatar from Sparse-View Video
+# [CVPR 2024 (Highlight)] Relightable and Animatable Neural Avatar from Sparse-View Video
 
 [Paper](https://arxiv.org/abs/2308.07903) | [Project Page](https://zju3dv.github.io/relightable_avatar) | [Video](https://youtu.be/BQ3pL7Uwbdk)
 
