@@ -15,15 +15,15 @@ Compared to studio environments, this setting is more practical and accessible b
 ### Prepare Trained Model
 
 We provide an example trained model for the *xuzhen* sequence of the MobileStage dataset:
-- The base AniSDF model can be downloaded here: [latest.zip](https://github.com/dendenxu/relightable_avatar/files/13040304/latest.zip).
-- The relightable model can be downloaded here: [latest.zip](https://github.com/dendenxu/relightable_avatar/files/13040308/latest.zip).
-- Furthermore, you'll need to download a skeleton dataset (very small, only with some basic information needed to run `relightable_avatar`) here: [xuzhen_skeleton.tar.gz](https://github.com/dendenxu/relightable_avatar/files/13040284/xuzhen_skeleton.tar.gz).
+- The base `AniSDF` model can be downloaded from here: [anisdf.zip](https://github.com/zju3dv/RelightableAvatar/files/15020629/anisdf.zip).
+- The `RelightableAvatar` model can be downloaded from here: [relightable.zip](https://github.com/zju3dv/RelightableAvatar/files/15020631/relightable.zip).
+- Furthermore, you'll need to download a skeleton dataset (very small, only with some basic information needed to run `relightable_avatar`) here: [minimal.tar.gz](https://github.com/zju3dv/RelightableAvatar/files/15020633/minimal.tar.gz).
   - The skeleton dataset is only required if the full dataset hasn't been downloaded and placed at its corresponding location.
-- For relighting, we also provide the downscaled environment map: [16x32.zip](https://github.com/dendenxu/relightable_avatar/files/13050868/16x32.zip). If you see errors about `data/lighting`, download this.
+- For relighting, we also provide the downscaled environment map: [16x32.zip](https://github.com/zju3dv/RelightableAvatar/files/15020635/16x32.zip). If you see errors about `data/lighting`, download this.
 
 Trained model and skeleton data placement:
-- The base AniSDF model should be put in `data/trained_model/deform/xuzhen_12v_geo`, after which we expect `latest.pth` to reside at `data/trained_model/deform/xuzhen_12v_geo/latest.pth`.
-- The relightable model should be put in `data/trained_model/relight/xuzhen_12v_geo_fix_mat`, after which we expect `latest.pth` to reside at `data/trained_model/deform/xuzhen_12v_geo_fix_mat/latest.pth`.
+- The base `AniSDF` model should be put in `data/trained_model/deform/xuzhen_12v_geo`, after which we expect `latest.pth` to reside at `data/trained_model/deform/xuzhen_12v_geo/latest.pth`.
+- The `RelightableAvatar` model should be put in `data/trained_model/relight/xuzhen_12v_geo_fix_mat`, after which we expect `latest.pth` to reside at `data/trained_model/deform/xuzhen_12v_geo_fix_mat/latest.pth`.
 - The skeleton dataset should be extracted at `data/mobile_stage/xuzhen`, leading to `data/mobile_stage/xuzhen/motion.npz...`.
 - The environment map should be placed at `data/lighting`, after which a `data/lighting/16x32` folder is expected.
 
